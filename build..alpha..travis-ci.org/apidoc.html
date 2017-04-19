@@ -1,0 +1,285 @@
+<div class="apidocDiv">
+<style>
+/*csslint
+*/
+.apidocDiv {
+    background: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.apidocDiv a[href] {
+    color: #33f;
+    font-weight: bold;
+    text-decoration: none;
+}
+.apidocDiv a[href]:hover {
+    text-decoration: underline;
+}
+.apidocCodeCommentSpan {
+    background: #bbf;
+    color: #000;
+    display: block;
+}
+.apidocCodeKeywordSpan {
+    color: #d00;
+    font-weight: bold;
+}
+.apidocCodePre {
+    background: #eef;
+    border: 1px solid;
+    color: #777;
+    padding: 5px;
+    white-space: pre-wrap;
+}
+.apidocFooterDiv {
+    margin-top: 20px;
+    text-align: center;
+}
+.apidocModuleLi {
+    margin-top: 10px;
+}
+.apidocSectionDiv {
+    border-top: 1px solid;
+    margin-top: 20px;
+}
+.apidocSignatureSpan {
+    color: #777;
+    font-weight: bold;
+}
+</style>
+<h1>api documentation for
+    <a
+
+        href="https://github.com/moshen/node-googlemaps#readme"
+
+    >googlemaps (v1.12.0)</a>
+</h1>
+<h4>A simple way to query the Google Maps API from Node.js</h4>
+<div class="apidocSectionDiv"><a
+    href="#apidoc.tableOfContents"
+    id="apidoc.tableOfContents"
+><h1>table of contents</h1></a><ol>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.googlemaps">module googlemaps</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.googlemaps.googlemaps">
+            function <span class="apidocSignatureSpan"></span>googlemaps
+            <span class="apidocSignatureSpan">(config, request)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <span class="apidocSignatureSpan">object <span class="apidocSignatureSpan">googlemaps.</span>travelUtils</span>
+
+        </li>
+
+    </ol></li>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.googlemaps.travelUtils">module googlemaps.travelUtils</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.googlemaps.travelUtils.convertTargetTimes">
+            function <span class="apidocSignatureSpan">googlemaps.travelUtils.</span>convertTargetTimes
+            <span class="apidocSignatureSpan">(args)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.googlemaps.travelUtils.validateCommonArgs">
+            function <span class="apidocSignatureSpan">googlemaps.travelUtils.</span>validateCommonArgs
+            <span class="apidocSignatureSpan">(args)</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+</ol></div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.googlemaps" id="apidoc.module.googlemaps">module googlemaps</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.googlemaps.googlemaps" id="apidoc.element.googlemaps.googlemaps">
+        function <span class="apidocSignatureSpan"></span>googlemaps
+        <span class="apidocSignatureSpan">(config, request)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">googlemaps = function (config, request) {
+
+  var pk = null;
+
+  if (!check.object(config)) {
+    config = {};
+  }
+
+  var clonedConfig = JSON.parse(JSON.stringify(config));
+
+  if (clonedConfig[&#x27;google_private_key&#x27;] != null) {
+    pk = clonedConfig[&#x27;google_private_key&#x27;];
+    delete clonedConfig[&#x27;google_private_key&#x27;];
+  }
+
+<span class="apidocCodeCommentSpan">  /**
+   * Calling _getDefaultConfig() inside the constructor ensure the config is not a singleton
+   */
+</span>  this.config = _assignParams(_getDefaultConfig(), clonedConfig, ACCEPTED_CONFIG_KEYS);
+
+  if (pk != null) {
+    this.config[&#x27;google_private_key&#x27;] = pk;
+  }
+
+  if (typeof request !== &#x27;function&#x27;) {
+    request = defaultRequest;
+  }
+
+  this.request = request;
+
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+
+</div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.googlemaps.travelUtils" id="apidoc.module.googlemaps.travelUtils">module googlemaps.travelUtils</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.googlemaps.travelUtils.convertTargetTimes" id="apidoc.element.googlemaps.travelUtils.convertTargetTimes">
+        function <span class="apidocSignatureSpan">googlemaps.travelUtils.</span>convertTargetTimes
+        <span class="apidocSignatureSpan">(args)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">convertTargetTimes = function (args) {
+  // convert departure_time in UNIX timestamp
+  if (args.departure_time != null) {
+    args.departure_time = Math.floor( args.departure_time/1000 )
+  }
+
+  // convert arrival_time in UNIX timestamp
+  if (args.arrival_time != null) {
+    args.arrival_time = Math.floor( args.arrival_time/1000 )
+  }
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+  // validate common directions/distance-matrix args
+  try {
+    _travelUtils.validateCommonArgs(args);
+  } catch(e) {
+    return callback(e);
+  }
+
+  _travelUtils.<span class="apidocCodeKeywordSpan">convertTargetTimes</span>(args);
+
+  return _makeRequest(this.request, this.config, GOOGLEMAPS_ENDPOINTS[METHOD_KEY], args, _jsonParser(callback), MAX_REQUEST_LENGTHS
+[METHOD_KEY]);
+
+};
+...</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.googlemaps.travelUtils.validateCommonArgs" id="apidoc.element.googlemaps.travelUtils.validateCommonArgs">
+        function <span class="apidocSignatureSpan">googlemaps.travelUtils.</span>validateCommonArgs
+        <span class="apidocSignatureSpan">(args)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">validateCommonArgs = function (args) {
+  if (args.mode != null) {
+    args.mode = args.mode.toLowerCase();
+    if (args.mode !== &#x27;driving&#x27; &#x26;&#x26; args.mode !== &#x27;walking&#x27; &#x26;&#x26; args.mode !== &#x27;bicycling&#x27; &#x26;&#x26; args.mode !== &#x27;transit&#x27;) {
+      throw new Error(&#x27;Invalid transport mode: &#x27;+args.mode+&#x27;. Valid params.mode are [driving|walking|bicycling|transit]&#x27;);
+    }
+    if (args.mode == &#x27;transit&#x27;) {
+      if (args.departure_time == null &#x26;&#x26; args.arrival_time == null) {
+        throw new Error(&#x27;When specifying params.mode = transit either params.departure_time or params.arrival_time must be provided
+&#x27;);
+      }
+      if (args.waypoints != null) {
+        throw new Error(&#x27;It is not possible to specify waypoints when params.mode = transit&#x27;);
+      }
+    }
+  }
+
+  if (args.avoid != null) {
+    args.avoid = args.avoid.toLowerCase();
+    var argsArray = args.avoid.split(&#x27;|&#x27;);
+    for (var argIdx in argsArray) {
+      var argName = argsArray[argIdx];
+      if (argName !== &#x27;tolls&#x27; &#x26;&#x26; argName !== &#x27;highways&#x27; &#x26;&#x26; argName !== &#x27;ferries&#x27;) {
+        throw new Error(&#x27;Invalid params.avoid: &#x27; + argName + &#x27;. Valid params.avoid are [tolls|highways|ferries]&#x27;);
+      }
+    }
+  }
+
+  if (args.units != null) {
+    args.units = args.units.toLowerCase();
+    if (args.units !== &#x27;metric&#x27; &#x26;&#x26; args.units !== &#x27;imperial&#x27;) {
+      throw new Error(&#x27;Invalid params.units: &#x27;+args.units+&#x27;. Valid params.units are [metric|imperial]&#x27;);
+    }
+  }
+
+  if (args.departure_time != null || args.arrival_time != null) {
+    if (args.mode &#x26;&#x26; args.mode !== &#x27;driving&#x27; &#x26;&#x26; args.mode !== &#x27;transit&#x27;) {
+      throw new Error(&#x27;params.departure_time or params.arrival_time can only be specified when params.mode = [driving|transit]&#x27;);
+    }
+  }
+
+  if (args.traffic_model != null) {
+    if (args.mode &#x26;&#x26; args.mode !== &#x27;driving&#x27;) {
+      throw new Error(&#x27;params.traffic_model can only be specified when params.mode = [&#x22;driving&#x22;|null]&#x27;);
+    }
+    if (args.departure_time == null || args.departure_time &#x3c; (new Date()).getTime()) {
+      throw new Error(&#x27;params.departure_time must be set and be after current time when params.traffic_model is set&#x27;);
+    }
+    if (args.traffic_model !== &#x27;best_guess&#x27; &#x26;&#x26; args.traffic_model !== &#x27;pessimistic&#x27; &#x26;&#x26; args.traffic_model !== &#x27;optimistic&#x27;) {
+      throw new Error(&#x27;Invalid params.traffic_model: &#x27;+args.traffic_model+&#x27;. Valid params.traffic_model are [best_guess|pessimistic
+|optimistic]&#x27;);
+    }
+  }
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+
+if (args.destination == null) {
+  return callback(new Error(&#x27;params.destination is required&#x27;));
+}
+
+// validate common directions/distance-matrix args
+try {
+  _travelUtils.<span class="apidocCodeKeywordSpan">validateCommonArgs</span>(args);
+} catch(e) {
+  return callback(e);
+}
+
+_travelUtils.convertTargetTimes(args);
+
+return _makeRequest(this.request, this.config, GOOGLEMAPS_ENDPOINTS[METHOD_KEY], args, _jsonParser(callback), MAX_REQUEST_LENGTHS
+[METHOD_KEY]);
+...</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocFooterDiv">
+    [ this document was created with
+    <a href="https://github.com/kaizhu256/node-utility2" target="_blank">utility2</a>
+    ]
+</div>
+</div>
